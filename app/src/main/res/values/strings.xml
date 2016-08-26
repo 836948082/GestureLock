@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">GestureLock</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- Accessibility description sent when user starts drawing a lock pattern. [CHAR LIMIT=NONE] -->
+    <string name="lockscreen_access_pattern_start">Pattern started</string>
+    <!-- Accessibility description sent when the pattern times out and is cleared. [CHAR LIMIT=NONE] -->
+    <string name="lockscreen_access_pattern_cleared">Pattern cleared</string>
+    <!-- Accessibility description sent when user adds a cell to the pattern. [CHAR LIMIT=NONE] -->
+    <string name="lockscreen_access_pattern_cell_added">Cell added</string>
+    <!-- Accessibility description sent when user completes drawing a pattern. [CHAR LIMIT=NONE] -->
+    <string name="lockscreen_access_pattern_detected">Pattern completed</string>
+    <string name="set_gesture">设置手势密码</string>
+
+    <!-- Splash activity -->
+    <string name="splash_activity">SplashActivity</string>
+
+    <!-- Gesture login activity -->
+    <string name="gesture_forget_gesture">忘记手势密码</string>
+    <string name="gesture_default">请输入手势密码</string>
+    <string name="gesture_error">手势密码输入错误</string>
+    <string name="gesture_correct">密码正确</string>
+
+    <!-- Create gesture activity -->
+    <string name="create_gesture_activity">CreateGestureActivity</string>
+    <string name="create_gesture_default">绘制解锁图案</string>
+    <string name="create_gesture_correct">再次绘制解锁图案</string>
+    <string name="create_gesture_less_error">至少连接4个点，请重新输入</string>
+    <string name="create_gesture_confirm_error">与上一次绘制不一致，请重新绘制</string>
+    <string name="create_gesture_confirm_correct">设置成功</string>
+    <string name="create_gesture_reset">重新设置</string>
+
+    <string name="input_identifying_code">请输入验证码</string>
+    <string name="identifying">验证</string>
+    <string name="draw_password">绘制密码</string>
+    <string name="password_state">密码状态</string>
+    <string name="set_password">设置密码</string>
+    <string name="modify_password">修改密码</string>
+    <string name="clean_password">清除密码</string>
+    <string name="jump_to">跳转</string>
+    <string name="login">登录</string>
+
+    <string name="descs"></string>
+</resources>
