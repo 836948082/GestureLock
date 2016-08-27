@@ -33,6 +33,10 @@ public class MApplication extends Application {
 	
 	private ACache aCache;
 	public static boolean hasPwd;
+	/**自动锁屏时长*/
+	private static int TIME = 1000 * 30;
+	/**进入程序就开始倒计时锁屏(没有触碰屏幕情况下)*/
+	private static boolean startIsLock = true;
 	
 	@Override
 	public void onCreate() {
@@ -40,6 +44,9 @@ public class MApplication extends Application {
 		getDensity();
 		register();
 		init();
+		if (startIsLock) {
+			startVerify();
+		}
 	}
 	
 	private void init() {
@@ -71,7 +78,7 @@ public class MApplication extends Application {
 		density = dm.density;
 		densityDpi = dm.densityDpi;
 	}
-	
+
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
@@ -100,11 +107,14 @@ public class MApplication extends Application {
 		} else {
 			//时间差
 			long temp = currentTimeMillis - lastTimeMillis;
-			// 如果时间差小于5分钟，就先停掉前一次的监听，再重新开启
-			if(temp < 1000 * 60 * 30){
+			// 如果时间差小于TIME，就先停掉前一次的监听，再重新开启
+			if(temp < TIME){
 				stopVerify();
 				startVerify();
+				lastTimeMillis = 0;/** 这一句的意思是两次触摸时间差小于TIME则重新开始计时 */
 			} else { // else 如果大于,那么上一次的监听在运行着，5分钟之后自然会锁定
+				Log.e("锁定时间", ""+System.currentTimeMillis()+"触摸之后大于" + (TIME / 1000) + "秒");
+				lastTimeMillis = 0;
 				stopVerify();
 				verify();
 			}
@@ -115,6 +125,9 @@ public class MApplication extends Application {
 		@Override
 		public void handleMessage(Message msg) {
 			super.handleMessage(msg);
+			Log.e("锁定时间", ""+System.currentTimeMillis()+"解锁后" + (TIME / 1000) + "秒自然锁定");
+			lastTimeMillis = 0;
+			stopVerify();
 			verify();
 		}
 	};
@@ -130,6 +143,7 @@ public class MApplication extends Application {
 		if(isTopRunning){ 
 			// 是否设置了密码
 			if (hasPwd) {
+				new SharedPreferencesUtils(getApplicationContext()).put("ISLOCK", true);//这里与忘记密码页面相呼应(判断是否是从自然锁屏情况下进入忘记密码页的)
 				// 判断检测界面是否已经运行
 				if(!GestureLoginActivity.IS_SHOW){
 					Intent intent = new Intent();
@@ -147,7 +161,7 @@ public class MApplication extends Application {
 	private static boolean isRunning;
 	
 	/**
-	 * 30分钟一次退出
+	 * TIME一次退出
 	 */
 	public void startVerify(){
 		if(timer == null){
@@ -162,7 +176,7 @@ public class MApplication extends Application {
 			};
 		}
 		if(!isRunning){
-			timer.schedule(timerTask, 30 * 60 * 1000, 30 * 60 * 1000);
+			timer.schedule(timerTask, TIME, TIME);
 			isRunning = true;
 		}
 	}
@@ -303,6 +317,7 @@ public class MApplication extends Application {
 							handler.sendEmptyMessage(0);
 						}
 					}.start();
+					Log.i("onActivityDestroyed", "程序不正常退出");
 					/** 这里竟然不起作用 */
 					new SharedPreferencesUtils(getApplicationContext()).put("ISFRIST", false);
 				}
@@ -314,7 +329,7 @@ public class MApplication extends Application {
             }
         });
 	}
-	
+
 	Handler handler = new Handler(){
 		@Override
 		public void handleMessage(Message msg) {
@@ -325,4 +340,5 @@ public class MApplication extends Application {
 			Log.i("程序不正常退出执行", ss);
 		}
 	};
+
 }

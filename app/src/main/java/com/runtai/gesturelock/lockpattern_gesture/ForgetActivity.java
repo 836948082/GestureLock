@@ -101,6 +101,15 @@ public class ForgetActivity extends BaseFragmentActivity {
 		} else {
 			Log.i("验证手势密码页面(不是从后台切换到前台(在程序中))跳转过来携带参数---->", "false");
     		Log.i("返回键返回", "正常返回");
+
+			//这里增加判断(是否是从自然锁定状态下的手势密码跳转过来的)
+			boolean lock = new SharedPreferencesUtils(getApplicationContext()).get("ISLOCK", false);
+			if (lock) {
+				Intent intent = new Intent();
+				intent.setClass(getApplicationContext(), GestureLoginActivity.class);
+				startActivity(intent);
+				new SharedPreferencesUtils(getApplicationContext()).put("ISLOCK", false);
+			}
 		}
     	finish();
 	}
